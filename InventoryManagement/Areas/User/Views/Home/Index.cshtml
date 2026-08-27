@@ -1,22 +1,20 @@
-﻿@model IEnumerable<LabSupply>
+@model IEnumerable<LabSupply>
 @{
-    ViewData["Title"] = "Lab Supplies Catalog";
+    ViewData["Title"] = "Dark Store Inventory Catalog - MP Online group 5";
 }
 
 <!-- Hero Section -->
-<div class="bg-light py-5 mb-4">
+<div class="bg-light py-4 mb-4 border-bottom">
     <div class="container">
         <div class="row align-items-center">
             <div class="col-lg-8">
-                <h1 class="display-4 fw-bold mb-3">Laboratory Supplies Catalog</h1>
-                <p class="lead text-muted">Browse our complete inventory of laboratory supplies and equipment</p>
+                <h1 class="display-5 fw-bold mb-2 text-dark">Dark Store Inventory Catalog</h1>
+                <p class="lead text-muted mb-0">Browse and manage active dark store SKUs, stock levels, and procurement suppliers</p>
             </div>
-            <div class="col-lg-4 text-lg-end">
-                <div class="d-inline-block">
-                    <div class="input-group input-group-lg">
-                        <span class="input-group-text"><i class="bi bi-search"></i></span>
-                        <input type="text" id="searchInput" class="form-control" placeholder="Search supplies...">
-                    </div>
+            <div class="col-lg-4 text-lg-end mt-3 mt-lg-0">
+                <div class="input-group input-group-lg shadow-sm">
+                    <span class="input-group-text bg-white border-end-0"><i class="bi bi-search text-muted"></i></span>
+                    <input type="text" id="searchInput" class="form-control border-start-0" placeholder="Search supplies or SKUs...">
                 </div>
             </div>
         </div>
@@ -25,92 +23,93 @@
 
 <!-- Filters -->
 <div class="container mb-4">
-    <div class="row">
-        <div class="col-12">
+    <div class="row align-items-center">
+        <div class="col-12 d-flex justify-content-between align-items-center flex-wrap gap-2">
             <div class="btn-group" role="group">
                 <input type="radio" class="btn-check" name="stockFilter" id="filterAll" value="all" checked>
-                <label class="btn btn-outline-primary" for="filterAll">
-                    <i class="bi bi-grid"></i> All Supplies
+                <label class="btn btn-outline-dark fw-semibold" for="filterAll">
+                    <i class="bi bi-grid-fill me-1"></i> All Items
                 </label>
 
                 <input type="radio" class="btn-check" name="stockFilter" id="filterInStock" value="instock">
-                <label class="btn btn-outline-success" for="filterInStock">
-                    <i class="bi bi-check-circle"></i> In Stock
+                <label class="btn btn-outline-success fw-semibold" for="filterInStock">
+                    <i class="bi bi-check-circle-fill me-1"></i> In Stock
                 </label>
 
                 <input type="radio" class="btn-check" name="stockFilter" id="filterLowStock" value="lowstock">
-                <label class="btn btn-outline-warning" for="filterLowStock">
-                    <i class="bi bi-exclamation-triangle"></i> Low Stock
+                <label class="btn btn-outline-warning text-dark fw-semibold" for="filterLowStock">
+                    <i class="bi bi-exclamation-triangle-fill me-1"></i> Low Stock
                 </label>
 
                 <input type="radio" class="btn-check" name="stockFilter" id="filterOutOfStock" value="outofstock">
-                <label class="btn btn-outline-danger" for="filterOutOfStock">
-                    <i class="bi bi-x-circle"></i> Out of Stock
+                <label class="btn btn-outline-danger fw-semibold" for="filterOutOfStock">
+                    <i class="bi bi-x-circle-fill me-1"></i> Out of Stock
                 </label>
             </div>
-            <span class="ms-3 text-muted">
-                <span id="resultCount">@Model.Count()</span> supplies found
+            <span class="text-muted fw-semibold">
+                <span id="resultCount" class="fw-bold text-dark">@Model.Count()</span> items found
             </span>
         </div>
     </div>
 </div>
 
 <!-- Supplies Grid -->
-<div class="container">
+<div class="container mb-5">
     <div class="row g-4" id="suppliesGrid">
         @foreach (var supply in Model)
         {
             var stockClass = supply.QuantityOnHand == 0 ? "out-of-stock" : supply.NeedsReorder ? "low-stock" : "in-stock";
-            var badgeClass = supply.QuantityOnHand == 0 ? "danger" : supply.NeedsReorder ? "warning" : "success";
+            var badgeClass = supply.QuantityOnHand == 0 ? "danger" : supply.NeedsReorder ? "warning text-dark" : "success";
             var stockText = supply.QuantityOnHand == 0 ? "Out of Stock" : supply.NeedsReorder ? "Low Stock" : "In Stock";
+            var imgSrc = string.IsNullOrEmpty(supply.ImageURL) ? "/images/supply/default.jpg" : supply.ImageURL;
             
             <div class="col-lg-3 col-md-4 col-sm-6 supply-card-wrapper" data-stock-status="@stockClass" data-supply-name="@supply.SupplyName.ToLower()" data-supplier="@supply.Supplier?.SupplierName?.ToLower()">
-                <div class="card supply-card h-100 shadow-sm">
+                <div class="card supply-card h-100 shadow-sm border-0 position-relative overflow-hidden">
                     <!-- Stock Status Badge -->
-                    <div class="position-absolute top-0 start-0 m-2">
-                        <span class="badge bg-@badgeClass">
+                    <div class="position-absolute top-0 start-0 m-2" style="z-index: 10;">
+                        <span class="badge bg-@badgeClass fw-bold px-2 py-1 shadow-sm">
                             @stockText
                         </span>
                     </div>
                     
-                    <!-- Image -->
-                    <div class="card-img-wrapper" style="height: 200px; overflow: hidden; background: #f8f9fa;">
-                        <img src="@supply.ImageURL" class="card-img-top" alt="@supply.SupplyName" 
+                    <!-- Image Wrapper -->
+                    <div class="card-img-wrapper position-relative" style="height: 180px; overflow: hidden; background: #212529;">
+                        <img src="@imgSrc" class="card-img-top" alt="" 
                              style="width: 100%; height: 100%; object-fit: cover;"
-                             onerror="this.src='/images/supply/default.jpg'">
+                             onerror="this.onerror=null; this.src='/images/supply/default.jpg';">
                     </div>
                     
                     <!-- Card Body -->
-                    <div class="card-body d-flex flex-column">
-                        <h5 class="card-title text-truncate" title="@supply.SupplyName">
+                    <div class="card-body d-flex flex-column bg-white">
+                        <h6 class="card-title fw-bold text-dark text-truncate mb-1" title="@supply.SupplyName">
                             @supply.SupplyName
-                        </h5>
+                        </h6>
                         
                         <div class="mb-3">
-                            <small class="text-muted">
-                                <i class="bi bi-building"></i> @supply.Supplier?.SupplierName
+                            <small class="text-muted text-truncate d-block">
+                                <i class="bi bi-building me-1"></i> @(supply.Supplier?.SupplierName ?? "MP Online Procurement")
                             </small>
                         </div>
                         
                         <div class="row g-2 mb-3">
                             <div class="col-6">
-                                <div class="text-center p-2 bg-light rounded">
-                                    <small class="text-muted d-block">Available</small>
-                                    <strong class="text-@badgeClass fs-5">@supply.QuantityOnHand</strong>
+                                <div class="text-center p-2 bg-light rounded border">
+                                    <small class="text-muted d-block small">Available</small>
+                                    <strong class="text-@badgeClass fs-6">@supply.QuantityOnHand</strong>
                                 </div>
                             </div>
                             <div class="col-6">
-                                <div class="text-center p-2 bg-light rounded">
-                                    <small class="text-muted d-block">Reorder At</small>
-                                    <strong class="fs-5">@supply.ReorderPoint</strong>
+                                <div class="text-center p-2 bg-light rounded border">
+                                    <small class="text-muted d-block small">Reorder At</small>
+                                    <strong class="fs-6 text-dark">@supply.ReorderPoint</strong>
                                 </div>
                             </div>
                         </div>
                         
                         <div class="mt-auto">
                             <a asp-action="Details" asp-route-id="@supply.SupplyID" 
-                               class="btn btn-primary w-100">
-                                <i class="bi bi-eye"></i> View Details
+                               class="btn btn-dark btn-sm w-100 fw-bold">
+                                <i class="bi bi-eye me-1"></i> View Details
                             </a>
                         </div>
                     </div>
@@ -123,8 +122,8 @@
     {
         <div class="text-center py-5">
             <i class="bi bi-inbox fs-1 text-muted d-block mb-3"></i>
-            <h4 class="text-muted">No supplies found</h4>
-            <p class="text-muted">The catalog is currently empty.</p>
+            <h4 class="text-muted">No items found</h4>
+            <p class="text-muted">The dark store catalog is currently empty.</p>
         </div>
     }
 </div>
