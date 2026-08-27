@@ -17,12 +17,9 @@
                     <!-- Quick Demo Credentials Box -->
                     <div class="alert alert-warning border-warning mb-4">
                         <div class="fw-bold mb-2 text-dark"><i class="bi bi-key-fill me-1"></i> Quick Demo Login Credentials:</div>
-                        <div class="d-grid gap-2">
+                        <div class="d-grid">
                             <button type="button" class="btn btn-dark btn-sm text-start" onclick="fillAdminCredentials()">
                                 <strong>🔑 Admin Account:</strong> <code>admin@mponline.com</code> | <code>Admin123!</code>
-                            </button>
-                            <button type="button" class="btn btn-outline-dark btn-sm text-start" onclick="fillDebugCredentials()">
-                                <strong>🐞 Debug Account:</strong> <code>debug@mponline.com</code> | <code>Debug123!</code>
                             </button>
                         </div>
                     </div>
@@ -73,10 +70,6 @@
         function fillAdminCredentials() {
             document.getElementById('inputEmail').value = 'admin@mponline.com';
             document.getElementById('inputPassword').value = 'Admin123!';
-        }
-        function fillDebugCredentials() {
-            document.getElementById('inputEmail').value = 'debug@mponline.com';
-            document.getElementById('inputPassword').value = 'Debug123!';
         }
     </script>
 }

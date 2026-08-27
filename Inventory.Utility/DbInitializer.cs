@@ -72,7 +72,6 @@ namespace Inventory.Utility
                 }
 
                 EnsureUser("admin@mponline.com", "MP Online Warehouse Admin", "Admin123!", SD.Role_Admin);
-                EnsureUser("debug@mponline.com", "MP Online Debug Engineer", "Debug123!", "Debug");
                 EnsureUser("supplier@mponline.com", "MP Online Procurement Vendor", "Supplier123!", SD.Role_Supplier);
                 EnsureUser("handler@mponline.com", "MP Online Supply Picker", "Handler123!", SD.Role_SupplyHandler);
 

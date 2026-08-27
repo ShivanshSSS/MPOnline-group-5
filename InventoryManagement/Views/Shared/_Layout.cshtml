@@ -15,10 +15,6 @@
         .navbar-custom {
             background-color: #f7c325 !important;
         }
-        .active-view-badge {
-            border: 2px solid #000 !important;
-            transform: scale(1.04);
-        }
     </style>
 </head>
 <body>
@@ -55,21 +51,6 @@
                             </a>
                         </li>
                     </ul>
-
-                    @* Two Distinct View Switches: Admin View vs Debug Website *@
-                    <div class="d-flex align-items-center flex-wrap gap-2 me-lg-3 my-2 my-lg-0">
-                        <span class="text-dark-50 small fw-bold d-none d-xl-inline"><i class="bi bi-eye-fill"></i> Switch View:</span>
-                        <a asp-area="Admin" asp-controller="Dashboard" asp-action="Index" 
-                           class="btn btn-sm btn-dark text-warning fw-bold shadow-sm active-view-badge"
-                           title="Switch to Admin Warehouse View">
-                            <i class="bi bi-shield-lock-fill text-warning me-1"></i> Admin View
-                        </a>
-                        <a asp-area="Debug" asp-controller="DebugDashboard" asp-action="Index" 
-                           class="btn btn-sm btn-danger text-white fw-bold shadow-sm"
-                           title="Switch to Debug Website & Simulator">
-                            <i class="bi bi-bug-fill text-warning me-1"></i> Debug Website
-                        </a>
-                    </div>
 
                     <partial name="_LoginPartial" />
                 </div>
