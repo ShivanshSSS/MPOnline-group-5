@@ -76,7 +76,7 @@ namespace Inventory.Utility
                 EnsureUser("supplier@mponline.com", "MP Online Procurement Vendor", "Supplier123!", SD.Role_Supplier);
                 EnsureUser("handler@mponline.com", "MP Online Supply Picker", "Handler123!", SD.Role_SupplyHandler);
 
-                // Seed Dark Stores
+                // 1. Seed Dark Stores
                 if (!_db.DarkStores.Any())
                 {
                     _db.DarkStores.AddRange(
@@ -90,7 +90,7 @@ namespace Inventory.Utility
                     _db.SaveChanges();
                 }
 
-                // Seed Suppliers
+                // 2. Seed Suppliers
                 if (!_db.Suppliers.Any())
                 {
                     _db.Suppliers.AddRange(
@@ -103,7 +103,11 @@ namespace Inventory.Utility
                     _db.SaveChanges();
                 }
 
-                // Seed Categories
+                // Fetch seeded supplier ID
+                int defaultSupplierId = _db.Suppliers.Select(s => s.SupplierID).FirstOrDefault();
+                if (defaultSupplierId == 0) defaultSupplierId = 1;
+
+                // 3. Seed Categories
                 if (!_db.Categories.Any())
                 {
                     _db.Categories.AddRange(
@@ -117,7 +121,7 @@ namespace Inventory.Utility
                     _db.SaveChanges();
                 }
 
-                // Seed Products
+                // 4. Seed Products
                 if (!_db.Products.Any())
                 {
                     var dairyCat = _db.Categories.FirstOrDefault(c => c.Name == "Dairy & Eggs")?.CategoryId ?? 1;
@@ -127,50 +131,65 @@ namespace Inventory.Utility
                     var vegCat = _db.Categories.FirstOrDefault(c => c.Name == "Fresh Fruits & Veggies")?.CategoryId ?? 5;
                     var homeCat = _db.Categories.FirstOrDefault(c => c.Name == "Personal Care & Home")?.CategoryId ?? 6;
 
-                    var defaultSupplier = _db.Suppliers.FirstOrDefault()?.SupplierID;
-
                     _db.Products.AddRange(
                         // Dairy & Eggs
-                        new Product { SKU = "MPO-DRY-101", Name = "Amul Taaza T-Special Milk 500ml", Price = 27.00m, QuantityOnHand = 85, MinStockLevel = 20, AisleLocation = "Aisle A-1, Bin 04", CategoryId = dairyCat, SupplierID = defaultSupplier, ExpiryDate = DateTime.Now.AddDays(3) },
-                        new Product { SKU = "MPO-DRY-102", Name = "Nandini GoodLife Toned Milk 1L", Price = 56.00m, QuantityOnHand = 40, MinStockLevel = 15, AisleLocation = "Aisle A-1, Bin 05", CategoryId = dairyCat, SupplierID = defaultSupplier, ExpiryDate = DateTime.Now.AddDays(14) },
-                        new Product { SKU = "MPO-DRY-103", Name = "Fresh Farm Eggs 6 Pack", Price = 48.00m, QuantityOnHand = 35, MinStockLevel = 10, AisleLocation = "Aisle A-2, Bin 01", CategoryId = dairyCat, SupplierID = defaultSupplier, ExpiryDate = DateTime.Now.AddDays(10) },
-                        new Product { SKU = "MPO-DRY-104", Name = "Epigamia Greek Yogurt Strawberry 85g", Price = 60.00m, QuantityOnHand = 6, MinStockLevel = 15, AisleLocation = "Aisle A-2, Bin 09", CategoryId = dairyCat, SupplierID = defaultSupplier, ExpiryDate = DateTime.Now.AddDays(5) },
-                        new Product { SKU = "MPO-DRY-105", Name = "Amul Pasteurized Salted Butter 100g", Price = 58.00m, QuantityOnHand = 110, MinStockLevel = 25, AisleLocation = "Aisle A-3, Bin 02", CategoryId = dairyCat, SupplierID = defaultSupplier, ExpiryDate = DateTime.Now.AddDays(45) },
-                        new Product { SKU = "MPO-DRY-106", Name = "Milky Mist Fresh Paneer 200g", Price = 95.00m, QuantityOnHand = 4, MinStockLevel = 12, AisleLocation = "Aisle A-3, Bin 07", CategoryId = dairyCat, SupplierID = defaultSupplier, ExpiryDate = DateTime.Now.AddDays(4) },
+                        new Product { SKU = "MPO-DRY-101", Name = "Amul Taaza T-Special Milk 500ml", Price = 27.00m, QuantityOnHand = 85, MinStockLevel = 20, AisleLocation = "Aisle A-1, Bin 04", CategoryId = dairyCat, SupplierID = defaultSupplierId, ExpiryDate = DateTime.Now.AddDays(3) },
+                        new Product { SKU = "MPO-DRY-102", Name = "Nandini GoodLife Toned Milk 1L", Price = 56.00m, QuantityOnHand = 40, MinStockLevel = 15, AisleLocation = "Aisle A-1, Bin 05", CategoryId = dairyCat, SupplierID = defaultSupplierId, ExpiryDate = DateTime.Now.AddDays(14) },
+                        new Product { SKU = "MPO-DRY-103", Name = "Fresh Farm Eggs 6 Pack", Price = 48.00m, QuantityOnHand = 35, MinStockLevel = 10, AisleLocation = "Aisle A-2, Bin 01", CategoryId = dairyCat, SupplierID = defaultSupplierId, ExpiryDate = DateTime.Now.AddDays(10) },
+                        new Product { SKU = "MPO-DRY-104", Name = "Epigamia Greek Yogurt Strawberry 85g", Price = 60.00m, QuantityOnHand = 6, MinStockLevel = 15, AisleLocation = "Aisle A-2, Bin 09", CategoryId = dairyCat, SupplierID = defaultSupplierId, ExpiryDate = DateTime.Now.AddDays(5) },
+                        new Product { SKU = "MPO-DRY-105", Name = "Amul Pasteurized Salted Butter 100g", Price = 58.00m, QuantityOnHand = 110, MinStockLevel = 25, AisleLocation = "Aisle A-3, Bin 02", CategoryId = dairyCat, SupplierID = defaultSupplierId, ExpiryDate = DateTime.Now.AddDays(45) },
+                        new Product { SKU = "MPO-DRY-106", Name = "Milky Mist Fresh Paneer 200g", Price = 95.00m, QuantityOnHand = 4, MinStockLevel = 12, AisleLocation = "Aisle A-3, Bin 07", CategoryId = dairyCat, SupplierID = defaultSupplierId, ExpiryDate = DateTime.Now.AddDays(4) },
 
                         // Munchies & Snacks
-                        new Product { SKU = "MPO-MNC-201", Name = "Lays India's Magic Masala Chips 50g", Price = 20.00m, QuantityOnHand = 150, MinStockLevel = 30, AisleLocation = "Aisle B-1, Bin 12", CategoryId = snackCat, SupplierID = defaultSupplier, ExpiryDate = DateTime.Now.AddMonths(4) },
-                        new Product { SKU = "MPO-MNC-202", Name = "Kurkure Masala Munch 85g", Price = 20.00m, QuantityOnHand = 120, MinStockLevel = 25, AisleLocation = "Aisle B-1, Bin 14", CategoryId = snackCat, SupplierID = defaultSupplier, ExpiryDate = DateTime.Now.AddMonths(4) },
-                        new Product { SKU = "MPO-MNC-203", Name = "Bingo Tedhe Medhe Masala Tadka 90g", Price = 20.00m, QuantityOnHand = 95, MinStockLevel = 20, AisleLocation = "Aisle B-2, Bin 03", CategoryId = snackCat, SupplierID = defaultSupplier, ExpiryDate = DateTime.Now.AddMonths(5) },
-                        new Product { SKU = "MPO-MNC-204", Name = "Haldiram's Aloo Bhujia Namkeen 150g", Price = 55.00m, QuantityOnHand = 75, MinStockLevel = 15, AisleLocation = "Aisle B-2, Bin 08", CategoryId = snackCat, SupplierID = defaultSupplier, ExpiryDate = DateTime.Now.AddMonths(6) },
-                        new Product { SKU = "MPO-MNC-205", Name = "Cadbury Oreo Original Vanilla Biscuits 120g", Price = 40.00m, QuantityOnHand = 3, MinStockLevel = 15, AisleLocation = "Aisle B-3, Bin 01", CategoryId = snackCat, SupplierID = defaultSupplier, ExpiryDate = DateTime.Now.AddMonths(8) },
+                        new Product { SKU = "MPO-MNC-201", Name = "Lays India's Magic Masala Chips 50g", Price = 20.00m, QuantityOnHand = 150, MinStockLevel = 30, AisleLocation = "Aisle B-1, Bin 12", CategoryId = snackCat, SupplierID = defaultSupplierId, ExpiryDate = DateTime.Now.AddMonths(4) },
+                        new Product { SKU = "MPO-MNC-202", Name = "Kurkure Masala Munch 85g", Price = 20.00m, QuantityOnHand = 120, MinStockLevel = 25, AisleLocation = "Aisle B-1, Bin 14", CategoryId = snackCat, SupplierID = defaultSupplierId, ExpiryDate = DateTime.Now.AddMonths(4) },
+                        new Product { SKU = "MPO-MNC-203", Name = "Bingo Tedhe Medhe Masala Tadka 90g", Price = 20.00m, QuantityOnHand = 95, MinStockLevel = 20, AisleLocation = "Aisle B-2, Bin 03", CategoryId = snackCat, SupplierID = defaultSupplierId, ExpiryDate = DateTime.Now.AddMonths(5) },
+                        new Product { SKU = "MPO-MNC-204", Name = "Haldiram's Aloo Bhujia Namkeen 150g", Price = 55.00m, QuantityOnHand = 75, MinStockLevel = 15, AisleLocation = "Aisle B-2, Bin 08", CategoryId = snackCat, SupplierID = defaultSupplierId, ExpiryDate = DateTime.Now.AddMonths(6) },
+                        new Product { SKU = "MPO-MNC-205", Name = "Cadbury Oreo Original Vanilla Biscuits 120g", Price = 40.00m, QuantityOnHand = 3, MinStockLevel = 15, AisleLocation = "Aisle B-3, Bin 01", CategoryId = snackCat, SupplierID = defaultSupplierId, ExpiryDate = DateTime.Now.AddMonths(8) },
 
                         // Cold Drinks & Juices
-                        new Product { SKU = "MPO-BEV-301", Name = "Coca-Cola Soft Drink 750ml", Price = 45.00m, QuantityOnHand = 90, MinStockLevel = 20, AisleLocation = "Aisle C-1, Bin 02", CategoryId = bevCat, SupplierID = defaultSupplier, ExpiryDate = DateTime.Now.AddMonths(6) },
-                        new Product { SKU = "MPO-BEV-302", Name = "Red Bull Energy Drink 250ml", Price = 125.00m, QuantityOnHand = 60, MinStockLevel = 15, AisleLocation = "Aisle C-1, Bin 08", CategoryId = bevCat, SupplierID = defaultSupplier, ExpiryDate = DateTime.Now.AddMonths(12) },
-                        new Product { SKU = "MPO-BEV-303", Name = "Tropicana 100% Orange Juice 1L", Price = 140.00m, QuantityOnHand = 30, MinStockLevel = 10, AisleLocation = "Aisle C-2, Bin 04", CategoryId = bevCat, SupplierID = defaultSupplier, ExpiryDate = DateTime.Now.AddMonths(3) },
-                        new Product { SKU = "MPO-BEV-304", Name = "Real Fruit Power Mango Juice 1L", Price = 115.00m, QuantityOnHand = 45, MinStockLevel = 12, AisleLocation = "Aisle C-2, Bin 06", CategoryId = bevCat, SupplierID = defaultSupplier, ExpiryDate = DateTime.Now.AddMonths(4) },
-                        new Product { SKU = "MPO-BEV-305", Name = "Thums Up Soft Drink 750ml", Price = 45.00m, QuantityOnHand = 110, MinStockLevel = 20, AisleLocation = "Aisle C-3, Bin 01", CategoryId = bevCat, SupplierID = defaultSupplier, ExpiryDate = DateTime.Now.AddMonths(6) },
+                        new Product { SKU = "MPO-BEV-301", Name = "Coca-Cola Soft Drink 750ml", Price = 45.00m, QuantityOnHand = 90, MinStockLevel = 20, AisleLocation = "Aisle C-1, Bin 02", CategoryId = bevCat, SupplierID = defaultSupplierId, ExpiryDate = DateTime.Now.AddMonths(6) },
+                        new Product { SKU = "MPO-BEV-302", Name = "Red Bull Energy Drink 250ml", Price = 125.00m, QuantityOnHand = 60, MinStockLevel = 15, AisleLocation = "Aisle C-1, Bin 08", CategoryId = bevCat, SupplierID = defaultSupplierId, ExpiryDate = DateTime.Now.AddMonths(12) },
+                        new Product { SKU = "MPO-BEV-303", Name = "Tropicana 100% Orange Juice 1L", Price = 140.00m, QuantityOnHand = 30, MinStockLevel = 10, AisleLocation = "Aisle C-2, Bin 04", CategoryId = bevCat, SupplierID = defaultSupplierId, ExpiryDate = DateTime.Now.AddMonths(3) },
+                        new Product { SKU = "MPO-BEV-304", Name = "Real Fruit Power Mango Juice 1L", Price = 115.00m, QuantityOnHand = 45, MinStockLevel = 12, AisleLocation = "Aisle C-2, Bin 06", CategoryId = bevCat, SupplierID = defaultSupplierId, ExpiryDate = DateTime.Now.AddMonths(4) },
+                        new Product { SKU = "MPO-BEV-305", Name = "Thums Up Soft Drink 750ml", Price = 45.00m, QuantityOnHand = 110, MinStockLevel = 20, AisleLocation = "Aisle C-3, Bin 01", CategoryId = bevCat, SupplierID = defaultSupplierId, ExpiryDate = DateTime.Now.AddMonths(6) },
 
                         // Instant Food & Staples
-                        new Product { SKU = "MPO-INS-401", Name = "Maggi 2-Minute Masala Noodles 280g (4-Pack)", Price = 58.00m, QuantityOnHand = 200, MinStockLevel = 40, AisleLocation = "Aisle D-1, Bin 01", CategoryId = instCat, SupplierID = defaultSupplier, ExpiryDate = DateTime.Now.AddMonths(8) },
-                        new Product { SKU = "MPO-INS-402", Name = "Sunfeast Yippee Magic Masala Noodles 240g", Price = 48.00m, QuantityOnHand = 130, MinStockLevel = 30, AisleLocation = "Aisle D-1, Bin 04", CategoryId = instCat, SupplierID = defaultSupplier, ExpiryDate = DateTime.Now.AddMonths(8) },
-                        new Product { SKU = "MPO-INS-403", Name = "Fortune Sunlite Refined Sunflower Oil 1L", Price = 135.00m, QuantityOnHand = 50, MinStockLevel = 15, AisleLocation = "Aisle D-2, Bin 02", CategoryId = instCat, SupplierID = defaultSupplier, ExpiryDate = DateTime.Now.AddMonths(12) },
-                        new Product { SKU = "MPO-INS-404", Name = "Aashirvaad Shudh Chakki Whole Wheat Atta 5kg", Price = 240.00m, QuantityOnHand = 40, MinStockLevel = 10, AisleLocation = "Aisle D-2, Bin 09", CategoryId = instCat, SupplierID = defaultSupplier, ExpiryDate = DateTime.Now.AddMonths(6) },
+                        new Product { SKU = "MPO-INS-401", Name = "Maggi 2-Minute Masala Noodles 280g (4-Pack)", Price = 58.00m, QuantityOnHand = 200, MinStockLevel = 40, AisleLocation = "Aisle D-1, Bin 01", CategoryId = instCat, SupplierID = defaultSupplierId, ExpiryDate = DateTime.Now.AddMonths(8) },
+                        new Product { SKU = "MPO-INS-402", Name = "Sunfeast Yippee Magic Masala Noodles 240g", Price = 48.00m, QuantityOnHand = 130, MinStockLevel = 30, AisleLocation = "Aisle D-1, Bin 04", CategoryId = instCat, SupplierID = defaultSupplierId, ExpiryDate = DateTime.Now.AddMonths(8) },
+                        new Product { SKU = "MPO-INS-403", Name = "Fortune Sunlite Refined Sunflower Oil 1L", Price = 135.00m, QuantityOnHand = 50, MinStockLevel = 15, AisleLocation = "Aisle D-2, Bin 02", CategoryId = instCat, SupplierID = defaultSupplierId, ExpiryDate = DateTime.Now.AddMonths(12) },
+                        new Product { SKU = "MPO-INS-404", Name = "Aashirvaad Shudh Chakki Whole Wheat Atta 5kg", Price = 240.00m, QuantityOnHand = 40, MinStockLevel = 10, AisleLocation = "Aisle D-2, Bin 09", CategoryId = instCat, SupplierID = defaultSupplierId, ExpiryDate = DateTime.Now.AddMonths(6) },
 
                         // Fresh Produce
-                        new Product { SKU = "MPO-VEG-501", Name = "Fresh Robusta Bananas 500g", Price = 32.00m, QuantityOnHand = 65, MinStockLevel = 15, AisleLocation = "Aisle E-1, Bin 01", CategoryId = vegCat, SupplierID = defaultSupplier, ExpiryDate = DateTime.Now.AddDays(4) },
-                        new Product { SKU = "MPO-VEG-502", Name = "Premium Shimla Royal Apples 1kg", Price = 180.00m, QuantityOnHand = 25, MinStockLevel = 10, AisleLocation = "Aisle E-1, Bin 05", CategoryId = vegCat, SupplierID = defaultSupplier, ExpiryDate = DateTime.Now.AddDays(7) },
-                        new Product { SKU = "MPO-VEG-503", Name = "Hybrid Red Tomatoes 1kg", Price = 38.00m, QuantityOnHand = 80, MinStockLevel = 20, AisleLocation = "Aisle E-2, Bin 03", CategoryId = vegCat, SupplierID = defaultSupplier, ExpiryDate = DateTime.Now.AddDays(5) },
+                        new Product { SKU = "MPO-VEG-501", Name = "Fresh Robusta Bananas 500g", Price = 32.00m, QuantityOnHand = 65, MinStockLevel = 15, AisleLocation = "Aisle E-1, Bin 01", CategoryId = vegCat, SupplierID = defaultSupplierId, ExpiryDate = DateTime.Now.AddDays(4) },
+                        new Product { SKU = "MPO-VEG-502", Name = "Premium Shimla Royal Apples 1kg", Price = 180.00m, QuantityOnHand = 25, MinStockLevel = 10, AisleLocation = "Aisle E-1, Bin 05", CategoryId = vegCat, SupplierID = defaultSupplierId, ExpiryDate = DateTime.Now.AddDays(7) },
+                        new Product { SKU = "MPO-VEG-503", Name = "Hybrid Red Tomatoes 1kg", Price = 38.00m, QuantityOnHand = 80, MinStockLevel = 20, AisleLocation = "Aisle E-2, Bin 03", CategoryId = vegCat, SupplierID = defaultSupplierId, ExpiryDate = DateTime.Now.AddDays(5) },
 
                         // Personal Care & Home
-                        new Product { SKU = "MPO-HOM-601", Name = "Dettol Antiseptic Disinfectant Liquid 250ml", Price = 118.00m, QuantityOnHand = 45, MinStockLevel = 10, AisleLocation = "Aisle F-1, Bin 02", CategoryId = homeCat, SupplierID = defaultSupplier, ExpiryDate = DateTime.Now.AddYears(2) },
-                        new Product { SKU = "MPO-HOM-602", Name = "Surf Excel Easy Wash Detergent Powder 1kg", Price = 145.00m, QuantityOnHand = 60, MinStockLevel = 15, AisleLocation = "Aisle F-1, Bin 07", CategoryId = homeCat, SupplierID = defaultSupplier, ExpiryDate = DateTime.Now.AddYears(3) }
+                        new Product { SKU = "MPO-HOM-601", Name = "Dettol Antiseptic Disinfectant Liquid 250ml", Price = 118.00m, QuantityOnHand = 45, MinStockLevel = 10, AisleLocation = "Aisle F-1, Bin 02", CategoryId = homeCat, SupplierID = defaultSupplierId, ExpiryDate = DateTime.Now.AddYears(2) },
+                        new Product { SKU = "MPO-HOM-602", Name = "Surf Excel Easy Wash Detergent Powder 1kg", Price = 145.00m, QuantityOnHand = 60, MinStockLevel = 15, AisleLocation = "Aisle F-1, Bin 07", CategoryId = homeCat, SupplierID = defaultSupplierId, ExpiryDate = DateTime.Now.AddYears(3) }
                     );
                     _db.SaveChanges();
                 }
 
-                // Seed Warehouse Orders & Line Items
+                // 5. Seed LabSupplies (for Stock Adjustment & LabSupplies Controllers)
+                if (!_db.LabSupplies.Any())
+                {
+                    var products = _db.Products.ToList();
+                    foreach (var p in products)
+                    {
+                        _db.LabSupplies.Add(new LabSupply
+                        {
+                            SupplyName = $"{p.Name} [{p.SKU}]",
+                            QuantityOnHand = p.QuantityOnHand,
+                            ReorderPoint = p.MinStockLevel,
+                            SupplierID = p.SupplierID ?? defaultSupplierId
+                        });
+                    }
+                    _db.SaveChanges();
+                }
+
+                // 6. Seed Warehouse Orders
                 if (!_db.WarehouseOrders.Any())
                 {
                     var p1 = _db.Products.FirstOrDefault(p => p.SKU == "MPO-DRY-101");
@@ -209,56 +228,25 @@ namespace Inventory.Utility
                                 new OrderItem { ProductId = p2?.ProductId ?? 2, Quantity = 2, UnitPrice = 45.00m },
                                 new OrderItem { ProductId = p4?.ProductId ?? 4, Quantity = 2, UnitPrice = 20.00m }
                             }
-                        },
-                        new WarehouseOrder
-                        {
-                            OrderCode = "MPO-ORD-1003",
-                            CustomerName = "Rohan Mehta",
-                            DeliveryAddress = "Tower B-1104, DLF Phase 5, Gurugram",
-                            OrderDate = DateTime.Now.AddMinutes(-15),
-                            OrderStatus = "Pending",
-                            TotalAmount = 240.00m,
-                            DarkStoreId = storeId,
-                            OrderItems = new List<OrderItem>
-                            {
-                                new OrderItem { ProductId = p3?.ProductId ?? 3, Quantity = 3, UnitPrice = 58.00m }
-                            }
-                        },
-                        new WarehouseOrder
-                        {
-                            OrderCode = "MPO-ORD-1004",
-                            CustomerName = "Kavita Rao",
-                            DeliveryAddress = "Flat 12, Hiranandani Gardens, Powai, Mumbai",
-                            OrderDate = DateTime.Now.AddMinutes(-5),
-                            OrderStatus = "Pending",
-                            TotalAmount = 110.00m,
-                            DarkStoreId = storeId,
-                            OrderItems = new List<OrderItem>
-                            {
-                                new OrderItem { ProductId = p1?.ProductId ?? 1, Quantity = 1, UnitPrice = 27.00m },
-                                new OrderItem { ProductId = p4?.ProductId ?? 4, Quantity = 3, UnitPrice = 20.00m }
-                            }
                         }
                     );
                     _db.SaveChanges();
                 }
 
-                // Seed Initial Debug Event Logs
+                // 7. Seed Debug Event Logs
                 if (!_db.DebugEventLogs.Any())
                 {
                     _db.DebugEventLogs.AddRange(
                         new DebugEventLog { Timestamp = DateTime.Now.AddMinutes(-60), EventType = "SystemInit", Message = "MP Online Dark Store Engine Initialized.", DetailsJson = "{\"StoreId\":1,\"Status\":\"Online\"}" },
                         new DebugEventLog { Timestamp = DateTime.Now.AddMinutes(-45), EventType = "OrderSimulated", Message = "Order MPO-ORD-1001 dispatched for customer Anish Verma.", DetailsJson = "{\"OrderCode\":\"MPO-ORD-1001\",\"Status\":\"Dispatched\"}" },
-                        new DebugEventLog { Timestamp = DateTime.Now.AddMinutes(-30), EventType = "LowStockAlert", Message = "Low stock alert triggered for Epigamia Greek Yogurt (6 units remaining, min: 15).", DetailsJson = "{\"SKU\":\"MPO-DRY-104\",\"CurrentStock\":6}" },
-                        new DebugEventLog { Timestamp = DateTime.Now.AddMinutes(-20), EventType = "LowStockAlert", Message = "Low stock alert triggered for Milky Mist Fresh Paneer (4 units remaining, min: 12).", DetailsJson = "{\"SKU\":\"MPO-DRY-106\",\"CurrentStock\":4}" },
-                        new DebugEventLog { Timestamp = DateTime.Now.AddMinutes(-10), EventType = "StockRestocked", Message = "Bulk restock completed for 6 Dark Stores.", DetailsJson = "{\"StoresUpdated\":6}" }
+                        new DebugEventLog { Timestamp = DateTime.Now.AddMinutes(-30), EventType = "LowStockAlert", Message = "Low stock alert triggered for Epigamia Greek Yogurt (6 units remaining, min: 15).", DetailsJson = "{\"SKU\":\"MPO-DRY-104\",\"CurrentStock\":6}" }
                     );
                     _db.SaveChanges();
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error seeding data: {ex.Message}");
+                Console.WriteLine($"Error seeding data: {ex.Message} | Inner: {ex.InnerException?.Message}");
             }
         }
     }
