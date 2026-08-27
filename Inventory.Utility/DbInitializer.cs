@@ -23,65 +23,60 @@ namespace Inventory.Utility
 
         public void Initialize()
         {
-            // Apply pending migrations
+            // Ensure SQLite database is created
             try
             {
-                if (_db.Database.GetPendingMigrations().Count() > 0)
-                {
-                    _db.Database.Migrate();
-                }
+                _db.Database.EnsureCreated();
             }
             catch (Exception ex)
             {
-                // Migration already applied or database doesn't exist
-                Console.WriteLine($"Migration error: {ex.Message}");
+                Console.WriteLine($"Database initialization error: {ex.Message}");
             }
 
             // Create roles if they don't exist
             try
             {
-                if (!_roleManager.RoleExistsAsync(SD.Role_Admin).GetAwaiter().GetResult())
+                // Ensure all roles exist
+                string[] roles = new[] { SD.Role_Admin, SD.Role_Supplier, SD.Role_SupplyHandler, SD.Role_Manager, SD.Role_Employee, SD.Role_Viewer };
+                foreach (var role in roles)
                 {
-                    Console.WriteLine("Creating roles...");
-                    _roleManager.CreateAsync(new IdentityRole(SD.Role_Admin)).GetAwaiter().GetResult();
-                    _roleManager.CreateAsync(new IdentityRole(SD.Role_Manager)).GetAwaiter().GetResult();
-                    _roleManager.CreateAsync(new IdentityRole(SD.Role_Employee)).GetAwaiter().GetResult();
-                    _roleManager.CreateAsync(new IdentityRole(SD.Role_Viewer)).GetAwaiter().GetResult();
-                    Console.WriteLine("Roles created successfully!");
-
-                    // Create default admin user
-                    Console.WriteLine("Creating default admin user...");
-                    var result = _userManager.CreateAsync(new ApplicationUser
+                    if (!_roleManager.RoleExistsAsync(role).GetAwaiter().GetResult())
                     {
-                        UserName = "admin@inventory.com",
-                        Email = "admin@inventory.com",
-                        Name = "System Administrator",
-                        PhoneNumber = "1234567890",
-                        StreetAddress = "123 Admin St",
-                        State = "IL",
-                        PostalCode = "23456",
-                        City = "Chicago",
-                        EmailConfirmed = true
-                    }, "Admin@123").GetAwaiter().GetResult();
+                        _roleManager.CreateAsync(new IdentityRole(role)).GetAwaiter().GetResult();
+                    }
+                }
 
-                    if (result.Succeeded)
+                // Helper local function to seed a user if missing
+                void EnsureUserCreated(string email, string name, string password, string roleName)
+                {
+                    var existingUser = _userManager.FindByEmailAsync(email).GetAwaiter().GetResult();
+                    if (existingUser == null)
                     {
-                        ApplicationUser? user = _db.ApplicationUsers.FirstOrDefault(u => u.Email == "admin@inventory.com");
-                        if (user != null)
+                        var newUser = new ApplicationUser
                         {
-                            _userManager.AddToRoleAsync(user, SD.Role_Admin).GetAwaiter().GetResult();
-                            Console.WriteLine("Default admin user created successfully!");
+                            UserName = email,
+                            Email = email,
+                            Name = name,
+                            PhoneNumber = "1234567890",
+                            StreetAddress = "123 MP Online St",
+                            State = "IL",
+                            PostalCode = "60601",
+                            City = "Chicago",
+                            EmailConfirmed = true
+                        };
+                        var createRes = _userManager.CreateAsync(newUser, password).GetAwaiter().GetResult();
+                        if (createRes.Succeeded)
+                        {
+                            _userManager.AddToRoleAsync(newUser, roleName).GetAwaiter().GetResult();
+                            Console.WriteLine($"Created account {email} with role {roleName}");
                         }
                     }
-                    else
-                    {
-                        Console.WriteLine($"Failed to create admin user: {string.Join(", ", result.Errors.Select(e => e.Description))}");
-                    }
                 }
-                else
-                {
-                    Console.WriteLine("Roles already exist. Skipping initialization.");
-                }
+
+                EnsureUserCreated("admin@inventory.com", "System Administrator", "Admin@123", SD.Role_Admin);
+                EnsureUserCreated("admin@mponline.com", "Admin Group 5", "Admin@123", SD.Role_Admin);
+                EnsureUserCreated("supplier@mponline.com", "Supplier Representative", "Supplier@123", SD.Role_Supplier);
+                EnsureUserCreated("handler@mponline.com", "Supply Handler Specialist", "Handler@123", SD.Role_SupplyHandler);
             }
             catch (Exception ex)
             {

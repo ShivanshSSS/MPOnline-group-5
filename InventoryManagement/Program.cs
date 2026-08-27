@@ -30,14 +30,7 @@ try
 
     // Configure Database Context
     builder.Services.AddDbContext<AppDbContext>(options =>
-        options.UseSqlServer(
-            builder.Configuration.GetConnectionString("DefaultConnection"),
-            sqlOptions => sqlOptions.EnableRetryOnFailure(
-                maxRetryCount: 5,
-                maxRetryDelay: TimeSpan.FromSeconds(30),
-                errorNumbersToAdd: null
-            )
-        ));
+        options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
 
     // Configure Razor Pages
     builder.Services.AddRazorPages();

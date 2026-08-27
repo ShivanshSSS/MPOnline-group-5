@@ -9,6 +9,11 @@
 *.user
 *.userosscache
 *.sln.docstates
+*.db
+*.db-shm
+*.db-wal
+dotnet-install.ps1
+
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
