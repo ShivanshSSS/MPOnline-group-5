@@ -1,310 +1,180 @@
-@model DashboardVM
 @{
-    ViewData["Title"] = "Admin Dashboard";
+    ViewData["Title"] = "Blinkit Dark Store Admin";
+    var products = ViewBag.Products as IEnumerable<Inventory.Models.Models.Product>;
+    var lowStockItems = ViewBag.LowStockItems as IEnumerable<Inventory.Models.Models.Product>;
+    var recentOrders = ViewBag.RecentOrders as IEnumerable<Inventory.Models.Models.WarehouseOrder>;
 }
 
-<div class="container-fluid">
+<div class="container-fluid py-3">
+    <!-- Title & View Switch Banner -->
     <div class="row mb-4">
-        <div class="col-12">
-            <h1 class="display-5 mb-3">
-                <i class="bi bi-speedometer2"></i> Dashboard
-            </h1>
-            <p class="text-muted">Overview of your inventory management system</p>
+        <div class="col-12 d-flex justify-content-between align-items-center flex-wrap gap-2">
+            <div>
+                <span class="badge bg-warning text-dark px-3 py-2 fw-bold mb-2">
+                    <i class="bi bi-lightning-charge-fill me-1"></i> Blinkit Quick-Commerce Operations
+                </span>
+                <h2 class="fw-bold mb-0 text-dark">Dark Store Warehouse Admin Control</h2>
+            </div>
+            <div>
+                <a asp-area="Debug" asp-controller="DebugDashboard" asp-action="Index" class="btn btn-dark btn-lg shadow">
+                    <i class="bi bi-bug-fill text-warning me-1"></i> Open Debug Website & Simulator
+                </a>
+            </div>
         </div>
     </div>
 
-    <!-- Key Metrics Cards -->
+    <!-- Metrics Row -->
     <div class="row g-4 mb-4">
-        <!-- Total Supplies -->
-        <div class="col-md-6 col-lg-3">
-            <div class="card shadow-sm-hover">
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm bg-warning text-dark">
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-center">
                         <div>
-                            <h6 class="text-muted mb-2">Total Supplies</h6>
-                            <h2 class="mb-0">@Model.TotalSupplies</h2>
+                            <div class="text-dark-50 small fw-bold text-uppercase">Total Catalog SKUs</div>
+                            <div class="fs-2 fw-bold">@ViewBag.TotalProducts</div>
                         </div>
-                        <div class="bg-primary bg-opacity-10 p-3 rounded">
-                            <i class="bi bi-box-seam text-primary fs-1"></i>
-                        </div>
+                        <i class="bi bi-box-seam fs-1 opacity-50"></i>
                     </div>
                 </div>
             </div>
         </div>
-
-        <!-- Low Stock -->
-        <div class="col-md-6 col-lg-3">
-            <div class="card shadow-sm-hover">
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm bg-success text-white">
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-center">
                         <div>
-                            <h6 class="text-muted mb-2">Low Stock Items</h6>
-                            <h2 class="mb-0 text-warning">@Model.LowStockCount</h2>
+                            <div class="text-white-50 small fw-bold text-uppercase">Total Inventory Valuation</div>
+                            <div class="fs-2 fw-bold">₹@ViewBag.TotalInventoryValue</div>
                         </div>
-                        <div class="bg-warning bg-opacity-10 p-3 rounded">
-                            <i class="bi bi-exclamation-triangle text-warning fs-1"></i>
-                        </div>
-                    </div>
-                    <a asp-controller="LabSupplies" asp-action="Index" class="btn btn-sm btn-link p-0 mt-2">
-                        View Details <i class="bi bi-arrow-right"></i>
-                    </a>
-                </div>
-            </div>
-        </div>
-
-        <!-- Out of Stock -->
-        <div class="col-md-6 col-lg-3">
-            <div class="card shadow-sm-hover">
-                <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div>
-                            <h6 class="text-muted mb-2">Out of Stock</h6>
-                            <h2 class="mb-0 text-danger">@Model.OutOfStockCount</h2>
-                        </div>
-                        <div class="bg-danger bg-opacity-10 p-3 rounded">
-                            <i class="bi bi-x-circle text-danger fs-1"></i>
-                        </div>
+                        <i class="bi bi-currency-rupee fs-1 opacity-50"></i>
                     </div>
                 </div>
             </div>
         </div>
-
-        <!-- Total Suppliers -->
-        <div class="col-md-6 col-lg-3">
-            <div class="card shadow-sm-hover">
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm bg-danger text-white">
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-center">
                         <div>
-                            <h6 class="text-muted mb-2">Suppliers</h6>
-                            <h2 class="mb-0">@Model.TotalSuppliers</h2>
+                            <div class="text-white-50 small fw-bold text-uppercase">Low Stock Restock Alerts</div>
+                            <div class="fs-2 fw-bold">@ViewBag.LowStockCount</div>
                         </div>
-                        <div class="bg-info bg-opacity-10 p-3 rounded">
-                            <i class="bi bi-building text-info fs-1"></i>
-                        </div>
+                        <i class="bi bi-exclamation-triangle fs-1 opacity-50"></i>
                     </div>
-                    <a asp-controller="Suppliers" asp-action="Index" class="btn btn-sm btn-link p-0 mt-2">
-                        Manage <i class="bi bi-arrow-right"></i>
-                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm bg-primary text-white">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <div class="text-white-50 small fw-bold text-uppercase">Active Dark Stores</div>
+                            <div class="fs-2 fw-bold">@ViewBag.TotalDarkStores Hubs</div>
+                        </div>
+                        <i class="bi bi-building fs-1 opacity-50"></i>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Purchase Orders Overview -->
-    <div class="row g-4 mb-4">
-        <div class="col-md-6">
-            <div class="card shadow-sm">
-                <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div>
-                            <h6 class="text-muted mb-2">Pending Orders</h6>
-                            <h2 class="mb-0 text-primary">@Model.PendingOrdersCount</h2>
-                        </div>
-                        <div class="bg-primary bg-opacity-10 p-3 rounded">
-                            <i class="bi bi-hourglass-split text-primary fs-1"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-6">
-            <div class="card shadow-sm">
-                <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div>
-                            <h6 class="text-muted mb-2">Completed Orders</h6>
-                            <h2 class="mb-0 text-success">@Model.CompletedOrdersCount</h2>
-                        </div>
-                        <div class="bg-success bg-opacity-10 p-3 rounded">
-                            <i class="bi bi-check-circle text-success fs-1"></i>
-                        </div>
-                    </div>
-                    <a asp-area="" asp-controller="PurchaseOrders" asp-action="Index" class="btn btn-sm btn-link p-0 mt-2">
-                        View All <i class="bi bi-arrow-right"></i>
-                    </a>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Low Stock Supplies & Recent Orders -->
+    <!-- Main Content Tables -->
     <div class="row g-4">
-        <!-- Low Stock Supplies -->
+        <!-- Low Stock Alert Table -->
         <div class="col-lg-6">
-            <div class="card shadow-sm">
-                <div class="card-header">
-                    <h5 class="mb-0">
-                        <i class="bi bi-exclamation-triangle-fill text-warning"></i>
-                        Low Stock Alerts
-                    </h5>
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center py-3">
+                    <h5 class="mb-0 fw-bold text-warning"><i class="bi bi-exclamation-octagon-fill me-2"></i>Urgent Stock Replenishment Needed</h5>
+                    <span class="badge bg-danger">Low Stock</span>
                 </div>
-                <div class="card-body">
-                    @if (Model.LowStockSupplies.Any())
-                    {
-                        <div class="table-responsive">
-                            <table class="table table-hover mb-0">
-                                <thead>
-                                    <tr>
-                                        <th>Supply</th>
-                                        <th>Current</th>
-                                        <th>Reorder Point</th>
-                                        <th>Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach (var supply in Model.LowStockSupplies)
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>SKU</th>
+                                    <th>Product Name</th>
+                                    <th>Location</th>
+                                    <th>Stock</th>
+                                    <th>Min</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (lowStockItems != null && lowStockItems.Any())
+                                {
+                                    foreach (var item in lowStockItems)
                                     {
-                                        <tr class="@(supply.QuantityOnHand == 0 ? "out-of-stock" : "low-stock")">
-                                            <td>
-                                                <strong>@supply.SupplyName</strong>
-                                                <br />
-                                                <small class="text-muted">@supply.Supplier?.SupplierName</small>
-                                            </td>
-                                            <td>
-                                                <span class="badge bg-@(supply.QuantityOnHand == 0 ? "danger" : "warning")">
-                                                    @supply.QuantityOnHand
-                                                </span>
-                                            </td>
-                                            <td>@supply.ReorderPoint</td>
-                                            <td>
-                                                <a asp-controller="StockAdjustment" asp-action="Index" asp-route-id="@supply.SupplyID" 
-                                                   class="btn btn-sm btn-outline-primary" title="Adjust Stock">
-                                                    <i class="bi bi-plus-circle"></i>
-                                                </a>
-                                            </td>
+                                        <tr class="table-danger">
+                                            <td><code class="fw-bold">@item.SKU</code></td>
+                                            <td class="fw-bold">@item.Name</td>
+                                            <td><span class="badge bg-light text-dark border"><i class="bi bi-geo-alt me-1"></i>@item.AisleLocation</span></td>
+                                            <td><span class="badge bg-danger fs-6">@item.QuantityOnHand</span></td>
+                                            <td>@item.MinStockLevel</td>
                                         </tr>
                                     }
-                                </tbody>
-                            </table>
-                        </div>
-                    }
-                    else
-                    {
-                        <div class="text-center py-4 text-muted">
-                            <i class="bi bi-check-circle fs-1 d-block mb-2"></i>
-                            <p>All supplies are well stocked!</p>
-                        </div>
-                    }
-                </div>
-                @if (Model.LowStockSupplies.Any())
-                {
-                    <div class="card-footer text-center">
-                        <a asp-controller="LabSupplies" asp-action="Index" class="btn btn-sm btn-primary">
-                            View All Supplies <i class="bi bi-arrow-right"></i>
-                        </a>
+                                }
+                                else
+                                {
+                                    <tr>
+                                        <td colspan="5" class="text-center py-4 text-muted">
+                                            <i class="bi bi-check-circle-fill text-success fs-2 d-block mb-2"></i>
+                                            All inventory items are above reorder thresholds!
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
                     </div>
-                }
+                </div>
             </div>
         </div>
 
-        <!-- Recent Purchase Orders -->
+        <!-- Recent Dark Store Orders -->
         <div class="col-lg-6">
-            <div class="card shadow-sm">
-                <div class="card-header">
-                    <h5 class="mb-0">
-                        <i class="bi bi-clock-history"></i>
-                        Recent Orders
-                    </h5>
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center py-3">
+                    <h5 class="mb-0 fw-bold text-warning"><i class="bi bi-cart-check-fill me-2"></i>Live Fulfillment & Picking Queue</h5>
+                    <span class="badge bg-warning text-dark">Real-Time Orders</span>
                 </div>
-                <div class="card-body">
-                    @if (Model.RecentOrders.Any())
-                    {
-                        <div class="table-responsive">
-                            <table class="table table-hover mb-0">
-                                <thead>
-                                    <tr>
-                                        <th>Supply</th>
-                                        <th>Date</th>
-                                        <th>Qty</th>
-                                        <th>Status</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach (var order in Model.RecentOrders)
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Order Code</th>
+                                    <th>Customer</th>
+                                    <th>Status</th>
+                                    <th>Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (recentOrders != null && recentOrders.Any())
+                                {
+                                    foreach (var ord in recentOrders)
                                     {
                                         <tr>
-                                            <td>
-                                                <strong>@order.LabSupply?.SupplyName</strong>
-                                            </td>
-                                            <td>
-                                                <small>@order.OrderDate.ToString("MMM dd, yyyy")</small>
-                                            </td>
-                                            <td>@order.QuantityOrdered</td>
-                                            <td>
-                                                @if (order.OrderStatus.Equals("Pending", StringComparison.OrdinalIgnoreCase))
-                                                {
-                                                    <span class="badge bg-warning">@order.OrderStatus</span>
-                                                }
-                                                else if (order.OrderStatus.Equals("Completed", StringComparison.OrdinalIgnoreCase) || 
-                                                         order.OrderStatus.Equals("Received", StringComparison.OrdinalIgnoreCase))
-                                                {
-                                                    <span class="badge bg-success">@order.OrderStatus</span>
-                                                }
-                                                else
-                                                {
-                                                    <span class="badge bg-secondary">@order.OrderStatus</span>
-                                                }
-                                            </td>
+                                            <td><code class="fw-bold text-dark">@ord.OrderCode</code></td>
+                                            <td>@ord.CustomerName</td>
+                                            <td><span class="badge bg-info text-dark fw-bold"><i class="bi bi-box-arrow-in-right me-1"></i>@ord.OrderStatus</span></td>
+                                            <td class="fw-bold">₹@ord.TotalAmount</td>
                                         </tr>
                                     }
-                                </tbody>
-                            </table>
-                        </div>
-                    }
-                    else
-                    {
-                        <div class="text-center py-4 text-muted">
-                            <i class="bi bi-inbox fs-1 d-block mb-2"></i>
-                            <p>No recent orders found</p>
-                        </div>
-                    }
-                </div>
-                @if (Model.RecentOrders.Any())
-                {
-                    <div class="card-footer text-center">
-                        <a asp-area="" asp-controller="PurchaseOrders" asp-action="Index" class="btn btn-sm btn-primary">
-                            View All Orders <i class="bi bi-arrow-right"></i>
-                        </a>
-                    </div>
-                }
-            </div>
-        </div>
-    </div>
-
-    <!-- Quick Actions -->
-    <div class="row mt-4">
-        <div class="col-12">
-            <div class="card shadow-sm">
-                <div class="card-body">
-                    <h5 class="card-title mb-3">
-                        <i class="bi bi-lightning-fill"></i> Quick Actions
-                    </h5>
-                    <div class="d-flex flex-wrap gap-2">
-                        <a asp-controller="LabSupplies" asp-action="Upsert" class="btn btn-primary">
-                            <i class="bi bi-plus-circle"></i> Add New Supply
-                        </a>
-                        <a asp-controller="Suppliers" asp-action="Create" class="btn btn-outline-primary">
-                            <i class="bi bi-building"></i> Add Supplier
-                        </a>
-                        <a asp-area="" asp-controller="PurchaseOrders" asp-action="Create" class="btn btn-outline-primary">
-                            <i class="bi bi-cart-plus"></i> Create Purchase Order
-                        </a>
-                        <a asp-controller="StockAdjustment" asp-action="Index" class="btn btn-outline-secondary">
-                            <i class="bi bi-arrow-left-right"></i> Adjust Stock
-                        </a>
+                                }
+                                else
+                                {
+                                    <tr>
+                                        <td colspan="4" class="text-center py-4 text-muted">
+                                            <i class="bi bi-inbox fs-2 d-block mb-2"></i>
+                                            No active warehouse picking orders. Use the Debug Website to simulate orders!
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
-
-@section Scripts {
-    <script>
-        // Auto-refresh dashboard every 5 minutes
-        setTimeout(function() {
-            location.reload();
-        }, 300000);
-    </script>
-}

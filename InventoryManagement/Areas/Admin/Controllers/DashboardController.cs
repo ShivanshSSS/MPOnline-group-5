@@ -1,78 +1,48 @@
-using Inventory.DataAccess.Repository.IRepository;
-using Inventory.Models.ViewModels;
-using Inventory.Utility;
+using Inventory.DataAccess.Data;
+using Inventory.Models.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace InventoryManagement.Areas.Admin.Controllers
 {
-    /// <summary>
-    /// Controller for the admin dashboard with key inventory metrics.
-    /// </summary>
     [Area("Admin")]
-    [Authorize]
     public class DashboardController : Controller
     {
-        private readonly IUnitOfWork _unitOfWork;
+        private readonly AppDbContext _db;
         private readonly ILogger<DashboardController> _logger;
 
-        public DashboardController(IUnitOfWork unitOfWork, ILogger<DashboardController> logger)
+        public DashboardController(AppDbContext db, ILogger<DashboardController> logger)
         {
-            _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
-            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _db = db;
+            _logger = logger;
         }
 
-        /// <summary>
-        /// Displays the admin dashboard with key metrics and insights.
-        /// </summary>
         public async Task<IActionResult> Index()
         {
             try
             {
-                var dashboardVM = new DashboardVM();
+                var products = await _db.Products.Include(p => p.Category).ToListAsync();
+                var orders = await _db.WarehouseOrders.Include(o => o.OrderItems).OrderByDescending(o => o.OrderDate).Take(8).ToListAsync();
+                var darkStores = await _db.DarkStores.ToListAsync();
 
-                // Get all supplies
-                var allSupplies = await _unitOfWork.LabSupply.GetAllAsync(includeProperties: "Supplier");
-                var suppliesList = allSupplies.ToList();
+                ViewBag.TotalProducts = products.Count;
+                ViewBag.LowStockCount = products.Count(p => p.IsLowStock);
+                ViewBag.OutOfStockCount = products.Count(p => p.QuantityOnHand == 0);
+                ViewBag.TotalInventoryValue = products.Sum(p => p.Price * p.QuantityOnHand);
+                ViewBag.TotalDarkStores = darkStores.Count;
+                ViewBag.ActiveOrdersCount = orders.Count(o => o.OrderStatus == "Pending" || o.OrderStatus == "Picking");
 
-                // Calculate metrics
-                dashboardVM.TotalSupplies = suppliesList.Count;
-                dashboardVM.LowStockCount = suppliesList.Count(s => s.NeedsReorder && s.QuantityOnHand > 0);
-                dashboardVM.OutOfStockCount = suppliesList.Count(s => s.QuantityOnHand == 0);
-                
-                // Get suppliers count
-                var suppliers = await _unitOfWork.Supplier.GetAllAsync();
-                dashboardVM.TotalSuppliers = suppliers.Count();
+                ViewBag.LowStockItems = products.Where(p => p.IsLowStock).OrderBy(p => p.QuantityOnHand).Take(6).ToList();
+                ViewBag.RecentOrders = orders;
+                ViewBag.Products = products;
 
-                // Get purchase orders
-                var allOrders = await _unitOfWork.PurchaseOrder.GetAllAsync(includeProperties: "LabSupply");
-                var ordersList = allOrders.ToList();
-
-                dashboardVM.PendingOrdersCount = ordersList.Count(o => o.OrderStatus.Equals("Pending", StringComparison.OrdinalIgnoreCase));
-                dashboardVM.CompletedOrdersCount = ordersList.Count(o => o.OrderStatus.Equals("Completed", StringComparison.OrdinalIgnoreCase) || 
-                                                                          o.OrderStatus.Equals("Received", StringComparison.OrdinalIgnoreCase));
-
-                // Get low stock supplies (top 5)
-                dashboardVM.LowStockSupplies = suppliesList
-                    .Where(s => s.NeedsReorder)
-                    .OrderBy(s => s.QuantityOnHand)
-                    .Take(5)
-                    .ToList();
-
-                // Get recent orders (top 5)
-                dashboardVM.RecentOrders = ordersList
-                    .OrderByDescending(o => o.OrderDate)
-                    .Take(5)
-                    .ToList();
-
-                _logger.LogInformation("Dashboard loaded successfully");
-                return View(dashboardVM);
+                return View();
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error loading dashboard");
-                TempData["error"] = "An error occurred while loading the dashboard.";
-                return View(new DashboardVM());
+                _logger.LogError(ex, "Error loading Blinkit Admin Dashboard");
+                return View();
             }
         }
     }

@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - MP Online group 5</title>
+    <title>@ViewData["Title"] - Blinkit Inventory Manager</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/InventoryManagement.styles.css" asp-append-version="true" />
@@ -12,122 +12,62 @@
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" />
     <link rel="stylesheet" href="//cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css" asp-append-version="true" />
     <style>
-        .active-view-btn {
-            border: 2px solid #ffc107 !important;
-            transform: scale(1.03);
+        .navbar-blinkit {
+            background-color: #f7c325 !important;
+        }
+        .active-view-badge {
+            border: 2px solid #000 !important;
+            transform: scale(1.04);
         }
     </style>
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-lg navbar-dark bg-primary border-bottom box-shadow mb-3">
+        <nav class="navbar navbar-expand-lg navbar-light navbar-blinkit border-bottom shadow-sm mb-3">
             <div class="container-fluid">
-                <a class="navbar-brand fw-bold" asp-area="User" asp-controller="Home" asp-action="Index">
-                    <i class="bi bi-box-seam text-warning me-1"></i> MP Online group 5
+                <a class="navbar-brand fw-bold text-dark fs-4" asp-area="Admin" asp-controller="Dashboard" asp-action="Index">
+                    <i class="bi bi-lightning-charge-fill text-dark me-1"></i> blinkit <span class="badge bg-dark text-warning fs-6">Inventory Manager</span>
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0 fw-semibold">
                         <li class="nav-item">
-                            <a class="nav-link" asp-area="User" asp-controller="Home" asp-action="Index">
-                                <i class="bi bi-house-door"></i> Home
+                            <a class="nav-link text-dark" asp-area="Admin" asp-controller="Dashboard" asp-action="Index">
+                                <i class="bi bi-speedometer2"></i> Admin Dashboard
                             </a>
                         </li>
-
-                        @* Admin View Links *@
-                        @if (User.IsInRole(SD.Role_Admin))
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link" asp-area="Admin" asp-controller="Dashboard" asp-action="Index">
-                                    <i class="bi bi-speedometer2"></i> Dashboard
-                                </a>
-                            </li>
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <i class="bi bi-gear"></i> Admin Management
-                                </a>
-                                <ul class="dropdown-menu">
-                                    <li>
-                                        <a class="dropdown-item" asp-area="Admin" asp-controller="LabSupplies" asp-action="Index">
-                                            <i class="bi bi-box-seam me-1"></i> Lab Supplies
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item" asp-area="Admin" asp-controller="Suppliers" asp-action="Index">
-                                            <i class="bi bi-building me-1"></i> Suppliers
-                                        </a>
-                                    </li>
-                                    <li><hr class="dropdown-divider"></li>
-                                    <li>
-                                        <a class="dropdown-item" asp-area="User" asp-controller="PurchaseOrders" asp-action="Index">
-                                            <i class="bi bi-cart me-1"></i> Purchase Orders
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item" asp-area="Admin" asp-controller="StockAdjustment" asp-action="Index">
-                                            <i class="bi bi-arrow-left-right me-1"></i> Stock Adjustment
-                                        </a>
-                                    </li>
-                                </ul>
-                            </li>
-                        }
-
-                        @* Supplier View Links *@
-                        @if (User.IsInRole(SD.Role_Supplier) || User.IsInRole(SD.Role_Manager))
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link" asp-area="Admin" asp-controller="Suppliers" asp-action="Index">
-                                    <i class="bi bi-building"></i> Suppliers
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" asp-area="Admin" asp-controller="LabSupplies" asp-action="Index">
-                                    <i class="bi bi-box-seam"></i> Lab Supplies
-                                </a>
-                            </li>
-                        }
-
-                        @* Supply Handler View Links *@
-                        @if (User.IsInRole(SD.Role_SupplyHandler) || User.IsInRole(SD.Role_Employee))
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link" asp-area="Admin" asp-controller="LabSupplies" asp-action="Index">
-                                    <i class="bi bi-box-seam"></i> Lab Supplies
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" asp-area="User" asp-controller="PurchaseOrders" asp-action="Index">
-                                    <i class="bi bi-cart"></i> Purchase Orders
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" asp-area="Admin" asp-controller="StockAdjustment" asp-action="Index">
-                                    <i class="bi bi-arrow-left-right"></i> Stock Adjustment
-                                </a>
-                            </li>
-                        }
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="Admin" asp-controller="LabSupplies" asp-action="Index">
+                                <i class="bi bi-box-seam"></i> Catalog & SKUs
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="Admin" asp-controller="Suppliers" asp-action="Index">
+                                <i class="bi bi-building"></i> Dark Stores & Vendors
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="Admin" asp-controller="StockAdjustment" asp-action="Index">
+                                <i class="bi bi-arrow-left-right"></i> Stock Adjustments
+                            </a>
+                        </li>
                     </ul>
 
-                    @* Top Right Role Switcher Buttons *@
+                    @* Two Distinct View Switches: Admin View vs Debug Website *@
                     <div class="d-flex align-items-center flex-wrap gap-2 me-lg-3 my-2 my-lg-0">
-                        <span class="text-white-50 small me-1 d-none d-xl-inline"><i class="bi bi-eye"></i> Switch View:</span>
-                        <a asp-area="User" asp-controller="RoleSwitch" asp-action="Switch" asp-route-targetRole="Admin" 
-                           class="btn btn-sm @(User.IsInRole(SD.Role_Admin) ? "btn-light text-primary fw-bold shadow-sm active-view-btn" : "btn-outline-light")"
-                           title="Switch to Admin View">
-                            <i class="bi bi-shield-lock-fill text-danger me-1"></i> Admin View
+                        <span class="text-dark-50 small fw-bold d-none d-xl-inline"><i class="bi bi-eye-fill"></i> Switch View:</span>
+                        <a asp-area="Admin" asp-controller="Dashboard" asp-action="Index" 
+                           class="btn btn-sm btn-dark text-warning fw-bold shadow-sm active-view-badge"
+                           title="Switch to Admin Warehouse View">
+                            <i class="bi bi-shield-lock-fill text-warning me-1"></i> Admin View
                         </a>
-                        <a asp-area="User" asp-controller="RoleSwitch" asp-action="Switch" asp-route-targetRole="Supplier" 
-                           class="btn btn-sm @(User.IsInRole(SD.Role_Supplier) || User.IsInRole(SD.Role_Manager) ? "btn-light text-primary fw-bold shadow-sm active-view-btn" : "btn-outline-light")"
-                           title="Switch to Supplier View">
-                            <i class="bi bi-building-fill text-warning me-1"></i> Supplier View
-                        </a>
-                        <a asp-area="User" asp-controller="RoleSwitch" asp-action="Switch" asp-route-targetRole="SupplyHandler" 
-                           class="btn btn-sm @(User.IsInRole(SD.Role_SupplyHandler) || User.IsInRole(SD.Role_Employee) ? "btn-light text-primary fw-bold shadow-sm active-view-btn" : "btn-outline-light")"
-                           title="Switch to Supply Handler View">
-                            <i class="bi bi-box-seam-fill text-info me-1"></i> Supply Handler View
+                        <a asp-area="Debug" asp-controller="DebugDashboard" asp-action="Index" 
+                           class="btn btn-sm btn-danger text-white fw-bold shadow-sm"
+                           title="Switch to Debug Website & Simulator">
+                            <i class="bi bi-bug-fill text-warning me-1"></i> Debug Website
                         </a>
                     </div>
 
@@ -136,17 +76,17 @@
             </div>
         </nav>
     </header>
-    <div class="container">
+    <div class="container-fluid px-4">
         <main role="main" class="pb-3">
             <partial name="_Notification"/>
             @RenderBody()
         </main>
     </div>
 
-    <footer class="border-top footer bg-primary text-white py-3 mt-auto">
+    <footer class="border-top footer bg-dark text-white py-3 mt-auto">
         <div class="container text-center">
-            <p class="mb-0 fw-semibold">
-                &copy; @DateTime.Now.Year - MP Online group 5
+            <p class="mb-0 fw-semibold text-white-50">
+                &copy; @DateTime.Now.Year - <strong class="text-warning">blinkit Inventory Manager</strong> | E-Commerce Dark Store Backend Warehouse
             </p>
         </div>
     </footer>
