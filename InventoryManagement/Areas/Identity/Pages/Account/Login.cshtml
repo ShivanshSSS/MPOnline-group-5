@@ -1,7 +1,7 @@
 @page
 @model LoginModel
 @{
-    ViewData["Title"] = "Login - Blinkit Inventory Manager";
+    ViewData["Title"] = "Login - MP Online group 5 Inventory Manager";
 }
 
 <div class="container">
@@ -9,8 +9,8 @@
         <div class="col-lg-5 col-md-7 col-sm-9">
             <div class="card shadow-lg border-0">
                 <div class="card-header bg-dark text-warning text-center py-4">
-                    <i class="bi bi-lightning-charge-fill fs-1 mb-2 d-block text-warning"></i>
-                    <h2 class="mb-0 fw-bold">blinkit <span class="badge bg-warning text-dark fs-6">Inventory Manager</span></h2>
+                    <i class="bi bi-box-seam fs-1 mb-2 d-block text-warning"></i>
+                    <h2 class="mb-0 fw-bold">MP Online group 5 <span class="badge bg-warning text-dark fs-6">Inventory Manager</span></h2>
                     <p class="mb-0 mt-2 text-white-50">Sign in to Warehouse & Dark Store Engine</p>
                 </div>
                 <div class="card-body p-4">
@@ -19,10 +19,10 @@
                         <div class="fw-bold mb-2 text-dark"><i class="bi bi-key-fill me-1"></i> Quick Demo Login Credentials:</div>
                         <div class="d-grid gap-2">
                             <button type="button" class="btn btn-dark btn-sm text-start" onclick="fillAdminCredentials()">
-                                <strong>🔑 Admin Account:</strong> <code>admin@blinkit.com</code> | <code>Admin123!</code>
+                                <strong>🔑 Admin Account:</strong> <code>admin@mponline.com</code> | <code>Admin123!</code>
                             </button>
                             <button type="button" class="btn btn-outline-dark btn-sm text-start" onclick="fillDebugCredentials()">
-                                <strong>🐞 Debug Account:</strong> <code>debug@blinkit.com</code> | <code>Debug123!</code>
+                                <strong>🐞 Debug Account:</strong> <code>debug@mponline.com</code> | <code>Debug123!</code>
                             </button>
                         </div>
                     </div>
@@ -34,7 +34,7 @@
                             <label asp-for="Input.Email" class="form-label fw-bold">
                                 <i class="bi bi-envelope-fill me-1"></i> Email Address
                             </label>
-                            <input asp-for="Input.Email" id="inputEmail" class="form-control form-control-lg" autocomplete="username" placeholder="admin@blinkit.com" aria-required="true" />
+                            <input asp-for="Input.Email" id="inputEmail" class="form-control form-control-lg" autocomplete="username" placeholder="admin@mponline.com" aria-required="true" />
                             <span asp-validation-for="Input.Email" class="text-danger"></span>
                         </div>
                         
@@ -71,11 +71,11 @@
     <partial name="_ValidationScriptsPartial" />
     <script>
         function fillAdminCredentials() {
-            document.getElementById('inputEmail').value = 'admin@blinkit.com';
+            document.getElementById('inputEmail').value = 'admin@mponline.com';
             document.getElementById('inputPassword').value = 'Admin123!';
         }
         function fillDebugCredentials() {
-            document.getElementById('inputEmail').value = 'debug@blinkit.com';
+            document.getElementById('inputEmail').value = 'debug@mponline.com';
             document.getElementById('inputPassword').value = 'Debug123!';
         }
     </script>

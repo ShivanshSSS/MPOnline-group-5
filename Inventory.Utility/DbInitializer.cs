@@ -57,7 +57,7 @@ namespace Inventory.Utility
                             Email = email,
                             Name = name,
                             PhoneNumber = "9876543210",
-                            StreetAddress = "Blinkit Dark Store Hub #4",
+                            StreetAddress = "MP Online Dark Store Hub #4",
                             City = "Bengaluru",
                             State = "KA",
                             PostalCode = "560038",
@@ -71,16 +71,16 @@ namespace Inventory.Utility
                     }
                 }
 
-                EnsureUser("admin@blinkit.com", "Blinkit Warehouse Admin", "Admin123!", SD.Role_Admin);
-                EnsureUser("debug@blinkit.com", "Blinkit Debug Engineer", "Debug123!", "Debug");
+                EnsureUser("admin@mponline.com", "MP Online Warehouse Admin", "Admin123!", SD.Role_Admin);
+                EnsureUser("debug@mponline.com", "MP Online Debug Engineer", "Debug123!", "Debug");
 
                 // Seed Dark Stores
                 if (!_db.DarkStores.Any())
                 {
                     _db.DarkStores.AddRange(
-                        new DarkStore { StoreName = "Blinkit Dark Store - Indiranagar Hub", City = "Bengaluru", Address = "100 Feet Rd, Indiranagar", IsActive = true },
-                        new DarkStore { StoreName = "Blinkit Dark Store - Koramangala Hub", City = "Bengaluru", Address = "80 Feet Rd, Koramangala 4th Block", IsActive = true },
-                        new DarkStore { StoreName = "Blinkit Dark Store - Cyber City Hub", City = "Gurugram", Address = "DLF Phase 2, Cyber City", IsActive = true }
+                        new DarkStore { StoreName = "MP Online Dark Store - Indiranagar Hub", City = "Bengaluru", Address = "100 Feet Rd, Indiranagar", IsActive = true },
+                        new DarkStore { StoreName = "MP Online Dark Store - Koramangala Hub", City = "Bengaluru", Address = "80 Feet Rd, Koramangala 4th Block", IsActive = true },
+                        new DarkStore { StoreName = "MP Online Dark Store - Cyber City Hub", City = "Gurugram", Address = "DLF Phase 2, Cyber City", IsActive = true }
                     );
                     _db.SaveChanges();
                 }
@@ -90,9 +90,9 @@ namespace Inventory.Utility
                 {
                     _db.Suppliers.Add(new Supplier
                     {
-                        SupplierName = "Blinkit National Procurement Ltd",
+                        SupplierName = "MP Online National Procurement Ltd",
                         ContactPerson = "Rajesh Kumar",
-                        ContactEmail = "procurement@blinkit.com"
+                        ContactEmail = "procurement@mponline.com"
                     });
                     _db.SaveChanges();
                 }
@@ -118,15 +118,15 @@ namespace Inventory.Utility
                     var instCat = _db.Categories.FirstOrDefault(c => c.Name == "Instant Food & Staples")?.CategoryId ?? 4;
 
                     _db.Products.AddRange(
-                        new Product { SKU = "BLK-DRY-101", Name = "Amul Taaza T-Special Milk 500ml", Price = 27.00m, QuantityOnHand = 85, MinStockLevel = 20, AisleLocation = "Aisle A-1, Bin 04", CategoryId = dairyCat, ExpiryDate = DateTime.Now.AddDays(3) },
-                        new Product { SKU = "BLK-DRY-102", Name = "Nandini GoodLife Toned Milk 1L", Price = 56.00m, QuantityOnHand = 40, MinStockLevel = 15, AisleLocation = "Aisle A-1, Bin 05", CategoryId = dairyCat, ExpiryDate = DateTime.Now.AddDays(14) },
-                        new Product { SKU = "BLK-DRY-103", Name = "Fresh Farm Eggs 6 Pack", Price = 48.00m, QuantityOnHand = 35, MinStockLevel = 10, AisleLocation = "Aisle A-2, Bin 01", CategoryId = dairyCat, ExpiryDate = DateTime.Now.AddDays(10) },
-                        new Product { SKU = "BLK-DRY-104", Name = "Epigamia Greek Yogurt Strawberry 85g", Price = 60.00m, QuantityOnHand = 6, MinStockLevel = 15, AisleLocation = "Aisle A-2, Bin 09", CategoryId = dairyCat, ExpiryDate = DateTime.Now.AddDays(5) },
-                        new Product { SKU = "BLK-MNC-201", Name = "Lays India's Magic Masala Chips 50g", Price = 20.00m, QuantityOnHand = 150, MinStockLevel = 30, AisleLocation = "Aisle B-3, Bin 12", CategoryId = snackCat, ExpiryDate = DateTime.Now.AddMonths(4) },
-                        new Product { SKU = "BLK-MNC-202", Name = "Kurkure Masala Munch 85g", Price = 20.00m, QuantityOnHand = 120, MinStockLevel = 25, AisleLocation = "Aisle B-3, Bin 14", CategoryId = snackCat, ExpiryDate = DateTime.Now.AddMonths(4) },
-                        new Product { SKU = "BLK-BEV-301", Name = "Coca-Cola Soft Drink 750ml", Price = 45.00m, QuantityOnHand = 90, MinStockLevel = 20, AisleLocation = "Aisle C-2, Bin 02", CategoryId = bevCat, ExpiryDate = DateTime.Now.AddMonths(6) },
-                        new Product { SKU = "BLK-BEV-302", Name = "Red Bull Energy Drink 250ml", Price = 125.00m, QuantityOnHand = 60, MinStockLevel = 15, AisleLocation = "Aisle C-2, Bin 08", CategoryId = bevCat, ExpiryDate = DateTime.Now.AddMonths(12) },
-                        new Product { SKU = "BLK-INS-401", Name = "Maggi 2-Minute Masala Noodles 280g (4-Pack)", Price = 58.00m, QuantityOnHand = 200, MinStockLevel = 40, AisleLocation = "Aisle D-1, Bin 01", CategoryId = instCat, ExpiryDate = DateTime.Now.AddMonths(8) }
+                        new Product { SKU = "MPO-DRY-101", Name = "Amul Taaza T-Special Milk 500ml", Price = 27.00m, QuantityOnHand = 85, MinStockLevel = 20, AisleLocation = "Aisle A-1, Bin 04", CategoryId = dairyCat, ExpiryDate = DateTime.Now.AddDays(3) },
+                        new Product { SKU = "MPO-DRY-102", Name = "Nandini GoodLife Toned Milk 1L", Price = 56.00m, QuantityOnHand = 40, MinStockLevel = 15, AisleLocation = "Aisle A-1, Bin 05", CategoryId = dairyCat, ExpiryDate = DateTime.Now.AddDays(14) },
+                        new Product { SKU = "MPO-DRY-103", Name = "Fresh Farm Eggs 6 Pack", Price = 48.00m, QuantityOnHand = 35, MinStockLevel = 10, AisleLocation = "Aisle A-2, Bin 01", CategoryId = dairyCat, ExpiryDate = DateTime.Now.AddDays(10) },
+                        new Product { SKU = "MPO-DRY-104", Name = "Epigamia Greek Yogurt Strawberry 85g", Price = 60.00m, QuantityOnHand = 6, MinStockLevel = 15, AisleLocation = "Aisle A-2, Bin 09", CategoryId = dairyCat, ExpiryDate = DateTime.Now.AddDays(5) },
+                        new Product { SKU = "MPO-MNC-201", Name = "Lays India's Magic Masala Chips 50g", Price = 20.00m, QuantityOnHand = 150, MinStockLevel = 30, AisleLocation = "Aisle B-3, Bin 12", CategoryId = snackCat, ExpiryDate = DateTime.Now.AddMonths(4) },
+                        new Product { SKU = "MPO-MNC-202", Name = "Kurkure Masala Munch 85g", Price = 20.00m, QuantityOnHand = 120, MinStockLevel = 25, AisleLocation = "Aisle B-3, Bin 14", CategoryId = snackCat, ExpiryDate = DateTime.Now.AddMonths(4) },
+                        new Product { SKU = "MPO-BEV-301", Name = "Coca-Cola Soft Drink 750ml", Price = 45.00m, QuantityOnHand = 90, MinStockLevel = 20, AisleLocation = "Aisle C-2, Bin 02", CategoryId = bevCat, ExpiryDate = DateTime.Now.AddMonths(6) },
+                        new Product { SKU = "MPO-BEV-302", Name = "Red Bull Energy Drink 250ml", Price = 125.00m, QuantityOnHand = 60, MinStockLevel = 15, AisleLocation = "Aisle C-2, Bin 08", CategoryId = bevCat, ExpiryDate = DateTime.Now.AddMonths(12) },
+                        new Product { SKU = "MPO-INS-401", Name = "Maggi 2-Minute Masala Noodles 280g (4-Pack)", Price = 58.00m, QuantityOnHand = 200, MinStockLevel = 40, AisleLocation = "Aisle D-1, Bin 01", CategoryId = instCat, ExpiryDate = DateTime.Now.AddMonths(8) }
                     );
                     _db.SaveChanges();
                 }
@@ -135,8 +135,8 @@ namespace Inventory.Utility
                 if (!_db.DebugEventLogs.Any())
                 {
                     _db.DebugEventLogs.AddRange(
-                        new DebugEventLog { Timestamp = DateTime.Now.AddMinutes(-25), EventType = "SystemInit", Message = "Blinkit Dark Store Engine Initialized.", DetailsJson = "{\"StoreId\":1,\"Status\":\"Online\"}" },
-                        new DebugEventLog { Timestamp = DateTime.Now.AddMinutes(-10), EventType = "LowStockAlert", Message = "Low stock alert triggered for Epigamia Greek Yogurt (6 units remaining, min: 15).", DetailsJson = "{\"SKU\":\"BLK-DRY-104\",\"CurrentStock\":6}" }
+                        new DebugEventLog { Timestamp = DateTime.Now.AddMinutes(-25), EventType = "SystemInit", Message = "MP Online Dark Store Engine Initialized.", DetailsJson = "{\"StoreId\":1,\"Status\":\"Online\"}" },
+                        new DebugEventLog { Timestamp = DateTime.Now.AddMinutes(-10), EventType = "LowStockAlert", Message = "Low stock alert triggered for Epigamia Greek Yogurt (6 units remaining, min: 15).", DetailsJson = "{\"SKU\":\"MPO-DRY-104\",\"CurrentStock\":6}" }
                     );
                     _db.SaveChanges();
                 }

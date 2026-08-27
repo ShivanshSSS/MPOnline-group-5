@@ -41,7 +41,7 @@ namespace InventoryManagement.Areas.Admin.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error loading Blinkit Admin Dashboard");
+                _logger.LogError(ex, "Error loading MP Online Admin Dashboard");
                 return View();
             }
         }

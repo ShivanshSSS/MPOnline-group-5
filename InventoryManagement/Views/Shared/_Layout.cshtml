@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - Blinkit Inventory Manager</title>
+    <title>@ViewData["Title"] - MP Online group 5 Inventory Manager</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/InventoryManagement.styles.css" asp-append-version="true" />
@@ -12,7 +12,7 @@
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" />
     <link rel="stylesheet" href="//cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css" asp-append-version="true" />
     <style>
-        .navbar-blinkit {
+        .navbar-custom {
             background-color: #f7c325 !important;
         }
         .active-view-badge {
@@ -23,10 +23,10 @@
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-lg navbar-light navbar-blinkit border-bottom shadow-sm mb-3">
+        <nav class="navbar navbar-expand-lg navbar-light navbar-custom border-bottom shadow-sm mb-3">
             <div class="container-fluid">
                 <a class="navbar-brand fw-bold text-dark fs-4" asp-area="Admin" asp-controller="Dashboard" asp-action="Index">
-                    <i class="bi bi-lightning-charge-fill text-dark me-1"></i> blinkit <span class="badge bg-dark text-warning fs-6">Inventory Manager</span>
+                    <i class="bi bi-box-seam text-dark me-1"></i> MP Online group 5 <span class="badge bg-dark text-warning fs-6">Inventory Manager</span>
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
@@ -86,7 +86,7 @@
     <footer class="border-top footer bg-dark text-white py-3 mt-auto">
         <div class="container text-center">
             <p class="mb-0 fw-semibold text-white-50">
-                &copy; @DateTime.Now.Year - <strong class="text-warning">blinkit Inventory Manager</strong> | E-Commerce Dark Store Backend Warehouse
+                &copy; @DateTime.Now.Year - <strong class="text-warning">MP Online group 5 Inventory Manager</strong> | E-Commerce Dark Store Backend Warehouse
             </p>
         </div>
     </footer>
